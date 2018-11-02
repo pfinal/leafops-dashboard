@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>代码发布平台</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <link rel="stylesheet" href="static/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="static/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="static/adminlte/css/AdminLTE.min.css">
+    <link rel="stylesheet" href="static/adminlte/css/skins/skin-blue.min.css">
+    <link href="static/art-dialog/css/ui-dialog.css" rel="stylesheet"/>
+    <link href="static/leaf/css/leaf.css" rel="stylesheet"/>
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+
+<div class="wrapper" id="app">
+
+    <main-header v-if="isLogin"></main-header>
+    <main-sidebar v-if="isLogin"></main-sidebar>
+    <router-view></router-view>
+    <main-footer v-if="isLogin"></main-footer>
+    <control-sidebar v-if="isLogin"></control-sidebar>
+    <div v-if="isLogin" class="control-sidebar-bg"></div>
+</div>
+
+<script id="tpl-main-header" type="text/x-template">
+    <header class="main-header">
+
+        <router-link to="/" class="logo">
+            <span class="logo-mini">D</span>
+            <span class="logo-lg">代码发布平台</span>
+        </router-link>
+
+        <nav class="navbar navbar-static-top" role="navigation">
+            <a href="javascript:;" class="sidebar-toggle" data-toggle="push-menu" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">4</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 4 messages</li>
+                            <li>
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Support Team
+                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">See All Messages</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">10</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 10 notifications</li>
+                            <li>
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <i class="fa fa-users text-aqua"></i> 5 new members joined today
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                        </ul>
+                    </li>
+                    <li class="dropdown tasks-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-flag-o"></i>
+                            <span class="label label-danger">9</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 9 tasks</li>
+                            <li>
+                                <ul class="menu">
+                                    <li>
+                                        <a href="#">
+                                            <h3>
+                                                Design some buttons
+                                                <small class="pull-right">20%</small>
+                                            </h3>
+                                            <div class="progress xs">
+                                                <div class="progress-bar progress-bar-aqua" style="width: 20%"
+                                                     role="progressbar"
+                                                     aria-valuenow="20" aria-valuemin="0" aria-valuemax="100">
+                                                    <span class="sr-only">20% Complete</span>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer">
+                                <a href="#">View all tasks</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="img/user2-160x160.jpg" class="user-image" alt="User Image">
+                            <span class="hidden-xs">管理员</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="user-header">
+                                <img src="img/user2-160x160.jpg" class="img-circle" alt="User Image">
+
+                                <p>
+                                    Admin - Web Developer
+                                </p>
+                            </li>
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Followers</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Sales</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Friends</a>
+                                    </div>
+                                </div>
+                            </li>
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="#" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <a href="javascript:;" @click="this.$root.logout" class="btn btn-default btn-flat">Sign
+                                        out</a>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+</script>
+
+<script id="tpl-main-sidebar" type="text/x-template">
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <ul class="sidebar-menu" data-widget="tree">
+                <li class="header">主菜单</li>
+                <li class="active">
+                    <router-link to="/machine"><i class="fa fa-laptop"></i><span>机器管理</span></router-link>
+                </li>
+                <li>
+                    <router-link to="/project"><i class="fa fa-paper-plane-o"></i><span>项目管理</span></router-link>
+                </li>
+                <li>
+                    <router-link to="/task"><i class="fa fa-tasks"></i><span>任务管理</span></router-link>
+                </li>
+            </ul>
+        </section>
+    </aside>
+</script>
+
+<script id="tpl-main-footer" type="text/x-template">
+    <!-- Main Footer -->
+    <footer class="main-footer">
+        <div class="pull-right hidden-xs">
+            Anything you want
+        </div>
+        <strong>Copyright &copy; <a href="#">Company</a>.</strong> All rights reserved.
+    </footer>
+</script>
+
+<script id="tpl-control-sidebar" type="text/x-template">
+    <!-- Control Sidebar -->
+    <aside class="control-sidebar control-sidebar-dark">
+        <!-- Create the tabs -->
+        <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+            <li class="active"><a href="#control-sidebar-home-tab" data-toggle="tab"><i class="fa fa-home"></i></a></li>
+            <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+        </ul>
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <!-- Home tab content -->
+            <div class="tab-pane active" id="control-sidebar-home-tab">
+                <h3 class="control-sidebar-heading">Recent Activity</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:;">
+                            <i class="menu-icon fa fa-birthday-cake bg-red"></i>
+
+                            <div class="menu-info">
+                                <h4 class="control-sidebar-subheading">Langdon's Birthday</h4>
+
+                                <p>Will be 23 on April 24th</p>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+                <h3 class="control-sidebar-heading">Tasks Progress</h3>
+                <ul class="control-sidebar-menu">
+                    <li>
+                        <a href="javascript:;">
+                            <h4 class="control-sidebar-subheading">
+                                Custom Template Design
+                                <span class="pull-right-container">
+                    <span class="label label-danger pull-right">70%</span>
+                  </span>
+                            </h4>
+
+                            <div class="progress progress-xxs">
+                                <div class="progress-bar progress-bar-danger" style="width: 70%"></div>
+                            </div>
+                        </a>
+                    </li>
+                </ul>
+                <!-- /.control-sidebar-menu -->
+
+            </div>
+            <!-- /.tab-pane -->
+            <!-- Stats tab content -->
+            <div class="tab-pane" id="control-sidebar-stats-tab">Stats Tab Content</div>
+            <!-- /.tab-pane -->
+            <!-- Settings tab content -->
+            <div class="tab-pane" id="control-sidebar-settings-tab">
+                <form method="post">
+                    <h3 class="control-sidebar-heading">General Settings</h3>
+
+                    <div class="form-group">
+                        <label class="control-sidebar-subheading">
+                            Report panel usage
+                            <input type="checkbox" class="pull-right" checked>
+                        </label>
+
+                        <p>
+                            Some information about this general settings option
+                        </p>
+                    </div>
+                    <!-- /.form-group -->
+                </form>
+            </div>
+            <!-- /.tab-pane -->
+        </div>
+    </aside>
+    <!-- /.control-sidebar -->
+</script>
+
+<!--首页-->
+<script id="tpl-page-home" type="text/x-template">
+    <div class="content-wrapper">
+        <section class="content-header">
+            <h1>
+                仪表盘
+                <small>控制面板</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 仪表盘</a></li>
+            </ol>
+        </section>
+
+        <section class="content container-fluid">
+            <div style="width: 97%;margin:0 auto"><img src="img/1.png" width="100%"></div>
+        </section>
+    </div>
+</script>
+
+<!--登录-->
+<script id="tpl-page-login" type="text/x-template">
+    <div style="background-color: #fff;height: 100%">
+
+        <div class="col-md-8 col-md-offset-2" style="margin-top: 20px;">
+            <div class="panel panel-default">
+                <div class="panel-heading">登录</div>
+
+                <div class="panel-body">
+
+                    <form class="form-horizontal" method="POST" action="/login">
+
+                        <div class="form-group  ">
+                            <label class="col-md-4 control-label">用户名/邮箱</label>
+
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" v-model="user.username">
+
+
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-md-4 control-label">密码</label>
+
+                            <div class="col-md-6">
+                                <input type="password" class="form-control" v-model="user.password">
+
+
+                                <span class="help-block">
+                                        <strong></strong>
+                                    </span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="remember" v-model="user.remember"> 记住我
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-6 col-md-offset-4">
+                                <button type="button" @click="login" class="btn btn-primary">
+                                    登录
+                                </button>
+
+                                <!--<a class="btn btn-link" href="/password/forgot">忘记密码?</a>
+                                <a class="btn btn-link" href="/register">没有帐号?</a>-->
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</script>
+
+<!--机器管理 start-->
+<script id="tpl-page-machine" type="text/x-template">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                机器管理
+                <small>列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">机器管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title"></h3>
+
+                            <div class="box-tools">
+                                <router-link class="btn" to="/machine/create"><i class="fa fa-plus"></i> 新增
+                                </router-link>
+                                <a class="btn">
+                                    <i class="fa fa-repeat"></i> 刷新
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>名称</th>
+                                    <th>IP</th>
+                                    <th>配置</th>
+                                    <!--<th>状态</th>-->
+                                    <th>操作</th>
+                                </tr>
+                                <tr v-for="item in items">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.ip }}</td>
+                                    <td>{{ item.hardware }}</td>
+                                    <!--<td><span class="label label-success">正常</span></td>-->
+                                    <td>
+                                        <a href="javascript:;" @click="test" v-bind:data-id="item.id">更新</a>
+                                        <a href="javascript:;" @click="del" v-bind:data-id="item.id">删除</a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+
+            </div>
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</script>
+<script id="tpl-page-machine-create" type="text/x-template">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                机器管理
+                <small>新增</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">机器管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+
+            <div class="row">
+                <div class="col-xs-12">
+
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">请输入主机信息</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>名称</label>
+                                <input type="text" class="form-control"
+                                       placeholder="请输入主机名称" v-model.trim="model.name">
+                            </div>
+                            <div class="form-group">
+                                <label>IP</label>
+                                <input type="text" class="form-control" v-model.trim="model.ip"
+                                       placeholder="请输入IP地址">
+                            </div>
+                            <div class="form-group">
+                                <label>用户</label>
+                                <input type="text" class="form-control" v-model.trim="model.user"
+                                       placeholder="用户">
+                            </div>
+                            <div class="form-group">
+                                <label>密码</label>
+                                <input type="password" class="form-control" v-model.trim="model.password"
+                                       placeholder="密码">
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="button" @click="save" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</script>
+
+
+<!--项目管理-->
+<script id="tpl-page-project" type="text/x-template">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                项目管理
+                <small>列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">项目管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title"></h3>
+
+                            <div class="box-tools">
+                                <router-link class="btn" to="/project/create"><i class="fa fa-plus"></i> 新增
+                                </router-link>
+                                <a class="btn">
+                                    <i class="fa fa-repeat"></i> 刷新
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>名称</th>
+                                    <th>主机</th>
+                                    <th>目录</th>
+                                    <th>操作</th>
+                                </tr>
+                                <tr v-for="item in items">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.name }}</td>
+                                    <td>{{ item.machine_names }}</td>
+                                    <td>{{ item.directory }}</td>
+                                    <td>
+                                        <a @click="del" v-bind:data-id="item.id">删除</a>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+
+            </div>
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</script>
+<script id="tpl-page-project-create" type="text/x-template">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                项目管理
+                <small>新增</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">项目管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+
+            <div class="row">
+                <div class="col-xs-12">
+
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">请输入项目信息</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>名称</label>
+                                <input type="text" class="form-control"
+                                       placeholder="请输入项目名称" v-model.trim="model.name">
+                            </div>
+                            <div class="form-group">
+                                <label>Git仓库</label>
+                                <input type="text" class="form-control"
+                                       placeholder="请输入代码仓库" v-model.trim="model.repository">
+                            </div>
+
+                            <div class="form-group">
+                                <label>部署主机</label>
+                                <input type="text" class="form-control hidden"
+                                       placeholder="部署主机" v-model.trim="model.machine_ids">
+
+                                <div>
+                                    <span class="item" v-for="item in machines" style="padding-right: 20px;">
+                                        <input type="checkbox" v-on:change="change" v-bind:id="item.id"
+                                               v-bind:data-id="item.id"> <label
+                                            v-bind:for="item.id">{{ item.name }}({{ item.ip }})</label>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>部署目录</label>
+                                <input type="text" class="form-control"
+                                       placeholder="请输入部署目录 例如: /www/demo" v-model.trim="model.directory">
+                            </div>
+
+                            <div class="form-group">
+                                <label>前置任务</label>
+                                <textarea  placeholder="请输入前置任务" class="form-control" v-model.trim="model.pre_deploy" cols="30" rows="3"></textarea>
+                            </div>
+                            <div class="form-group">
+                                <label>后置任务</label>
+                                <textarea  placeholder="请输入后置任务" class="form-control" v-model.trim="model.post_release" cols="30" rows="3"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="button" @click="save" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</script>
+
+<!--任务管理-->
+<script id="tpl-page-task" type="text/x-template">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                任务管理
+                <small>列表</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">任务管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+
+            <div class="row">
+                <div class="col-xs-12">
+
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <h3 class="box-title"></h3>
+
+                            <div class="box-tools">
+                                <router-link class="btn" to="/task/create"><i class="fa fa-plus"></i> 新增
+                                </router-link>
+                                <a class="btn" href="javascript:window.location.reload(true);">
+                                    <i class="fa fa-repeat"></i> 刷新
+                                </a>
+                            </div>
+                        </div>
+                        <!-- /.box-header -->
+                        <div class="box-body table-responsive no-padding">
+                            <table class="table table-hover">
+                                <tbody>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>项目</th>
+                                    <th>分支</th>
+                                    <th>版本</th>
+                                    <!--<th>操作人</th>-->
+                                    <th>状态</th>
+                                    <th>操作</th>
+                                </tr>
+                                <tr v-for="item in items">
+                                    <td>{{ item.id }}</td>
+                                    <td>{{ item.project_name }}</td>
+                                    <td>{{ item.branch }}</td>
+                                    <td>{{ item.version }}</td>
+                                    <!--<td>{{ item.user_id }}</td>-->
+                                    <td>{{ status_str(item.status) }}</td>
+                                    <td>
+                                        <a href="javascript:;" @click="deploy" v-bind:data-id="item.id">部署</a>
+                                        <a href="javascript:;" @click="del" v-bind:data-id="item.id">删除</a>
+                                    </td>
+
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
+                </div>
+
+            </div>
+
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</script>
+<script id="tpl-page-task-create" type="text/x-template">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <!-- Content Header (Page header) -->
+        <section class="content-header">
+            <h1>
+                任务管理
+                <small>新增</small>
+            </h1>
+            <ol class="breadcrumb">
+                <li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+                <li class="active">任务管理</li>
+            </ol>
+        </section>
+
+        <!-- Main content -->
+        <section class="content container-fluid">
+
+            <div class="row">
+                <div class="col-xs-12">
+
+
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">请输入任务信息</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="form-group">
+                                <label>项目</label>
+                                <select class="form-control" v-model.trim="model.project_id">
+                                    <option value="">请选择</option>
+                                    <option v-for="project in projects"
+                                            v-bind:value="project.id">{{ project.name }}</option>
+                                </select>
+
+                            </div>
+                            <div class="form-group">
+                                <label>分支</label>
+                                <input type="text" class="form-control"
+                                       placeholder="请输入分支" v-model.trim="model.branch">
+                            </div>
+
+                            <div class="form-group">
+                                <label>版本</label>
+                                <input type="text" class="form-control"
+                                       placeholder="请输入版本" v-model.trim="model.version">
+                            </div>
+
+                        </div>
+
+                        <div class="box-footer">
+                            <button type="button" @click="save" class="btn btn-primary">保存</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+        <!-- /.content -->
+    </div>
+    <!-- /.content-wrapper -->
+</script>
+
+
+<script src="static/jquery/dist/jquery.min.js"></script>
+<script src="static/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<script src="static/art-dialog/dist/dialog-min.js"></script>
+<script src="static/leaf/leaf.js"></script>
+
+<script src="static/vue.js/vue.js"></script>
+<script src="static/vue.js/vue-router.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
