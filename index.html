@@ -528,13 +528,15 @@
                                     <th>ID</th>
                                     <th>名称</th>
                                     <th>主机</th>
-                                    <th>目录</th>
+                                    <th>存放目录</th>
+                                    <th>部署目录</th>
                                     <th>操作</th>
                                 </tr>
                                 <tr v-for="item in items">
                                     <td>{{ item.id }}</td>
                                     <td>{{ item.name }}</td>
                                     <td>{{ item.machine_names }}</td>
+                                    <td>{{ item.save_directory }}</td>
                                     <td>{{ item.directory }}</td>
                                     <td>
                                         <a @click="del" v-bind:data-id="item.id">删除</a>
@@ -607,6 +609,12 @@
                                             v-bind:for="item.id">{{ item.name }}({{ item.ip }})</label>
                                     </span>
                                 </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label>代码存放目录</label>
+                                <input type="text" class="form-control "
+                                       placeholder="代码存放目录 例如: /www/tmp" v-model.trim="model.save_directory">
                             </div>
 
                             <div class="form-group">
@@ -745,7 +753,7 @@
                         <div class="box-body">
                             <div class="form-group">
                                 <label>项目</label>
-                                <select class="form-control" v-model.trim="model.project_id">
+                                <select class="form-control" v-model.trim="model.project_id" @change="chooseProject(model)">
                                     <option value="">请选择</option>
                                     <option v-for="project in projects"
                                             v-bind:value="project.id">{{ project.name }}</option>
@@ -754,14 +762,24 @@
                             </div>
                             <div class="form-group">
                                 <label>分支</label>
-                                <input type="text" class="form-control"
-                                       placeholder="请输入分支" v-model.trim="model.branch">
+
+                                <select class="form-control" v-model.trim="model.branch" @change="chooseBranch(model)">
+                                    <option value="">请选择</option>
+                                    <option v-for="branch in branchs"
+                                            v-bind:value="branch">{{ branch }}</option>
+                                </select>
+
                             </div>
 
                             <div class="form-group">
                                 <label>版本</label>
-                                <input type="text" class="form-control"
-                                       placeholder="请输入版本" v-model.trim="model.version">
+
+                                <select class="form-control" v-model.trim="model.version">
+                                    <option value="">请选择</option>
+                                    <option v-for="version in versions"
+                                            v-bind:value="version.version">{{ version.name }}</option>
+                                </select>
+
                             </div>
 
                         </div>
