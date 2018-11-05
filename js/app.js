@@ -160,6 +160,7 @@ Vue.component('page-project-create', {
                 'repository': '',
                 'machine_ids': '',
                 'directory': '',
+                'save_directory': '',
                 'pre_deploy': '',
                 'post_release': '',
             },
@@ -260,8 +261,11 @@ Vue.component('page-task-create', {
     data: function () {
         return {
             model: {
-                'branch': 'master',
+                'branch': '',
+                'version': '',
             },
+            versions:[],
+            branchs:[],
             projects: [],
         }
     },
@@ -271,11 +275,34 @@ Vue.component('page-task-create', {
             this.projects = data
         })
     },
-    methods: {
+     methods: {
         save: function () {
 
             this.$root.ajax(this, 'post', 'task/create', this.model, function () {
                 this.$router.push('/task')
+            })
+        },
+        chooseProject:function (model) {
+            if (model.project_id == '' || model.project_id == 'undefined' ){
+                this.branchs = []
+                this.versions = []
+                return
+            }
+            this.$root.ajax(this, 'post', 'task/branch', {id: model.project_id}, function (data) {
+
+               this.branchs = data
+
+            })
+        },
+         chooseBranch:function (model) {
+            if (model.branch == ''){
+                this.versions = []
+                return
+            }
+            this.$root.ajax(this, 'post', 'task/version', {id: model.project_id,branch:model.branch}, function (data) {
+
+               this.versions = data
+
             })
         }
     }
