@@ -402,6 +402,7 @@
                                     <!--<td><span class="label label-success">正常</span></td>-->
                                     <td>
                                         <a href="javascript:;" @click="test" v-bind:data-id="item.id">更新</a>
+                                        <router-link :to="{path:'/machine/create',query:{id:item.id}}">编辑</router-link>
                                         <a href="javascript:;" @click="del" v-bind:data-id="item.id">删除</a>
                                     </td>
                                 </tr>
@@ -539,6 +540,7 @@
                                     <td>{{ item.save_directory }}</td>
                                     <td>{{ item.directory }}</td>
                                     <td>
+                                         <router-link :to="{path:'/project/create',query:{id:item.id}}">编辑</router-link>
                                         <a @click="del" v-bind:data-id="item.id">删除</a>
                                     </td>
                                 </tr>
@@ -605,7 +607,7 @@
                                 <div>
                                     <span class="item" v-for="item in machines" style="padding-right: 20px;">
                                         <input type="checkbox" v-on:change="change" v-bind:id="item.id"
-                                               v-bind:data-id="item.id"> <label
+                                               v-bind:data-id="item.id" :checked="ids.indexOf(item.id)>=0"> <label
                                             v-bind:for="item.id">{{ item.name }}({{ item.ip }})</label>
                                     </span>
                                 </div>
@@ -702,7 +704,7 @@
                                     <!--<td>{{ item.user_id }}</td>-->
                                     <td>{{ status_str(item.status) }}</td>
                                     <td>
-                                        <a href="javascript:;" @click="deploy" v-bind:data-id="item.id">部署</a>
+                                        <a href="javascript:;" @click="deploy" v-bind:data-id="item.id">{{deploy_str(item.status)}}</a>
                                         <a href="javascript:;" @click="del" v-bind:data-id="item.id">删除</a>
                                     </td>
 
