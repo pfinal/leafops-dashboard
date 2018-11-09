@@ -97,16 +97,36 @@ Vue.component('page-machine-create', {
                 'ip': '',
                 'user': 'root',
                 'password': ''
-            }
+            },
+            url:'machine/create'
+        }
+    },
+    mounted: function () {
+        id = this.$route.query.id
+        if (id != undefined) {
+            this.get(id)
+            this.url = 'machine/update'
+            this.model.id = id
         }
     },
     methods: {
         save: function () {
 
-            this.$root.ajax(this, 'post', 'machine/create', this.model, function () {
+            this.$root.ajax(this, 'post', this.url, this.model, function () {
                 this.$router.push('/machine')
             })
 
+        },
+
+        get: function (id) {
+
+            this.$root.ajax(this, 'get', 'machine/get', {id: id}, function (data) {
+                this.model.name = data.name
+                this.model.ip = data.host
+                this.model.user = data.user
+                this.model.password = data.password
+
+            })
 
         }
     }
@@ -168,6 +188,7 @@ Vue.component('page-project-create', {
             machines: [],
             //选中的机器id
             ids: [],
+            url:'project/create',
         }
     },
     mounted: function () {
@@ -176,6 +197,13 @@ Vue.component('page-project-create', {
             this.machines = data
         })
 
+
+        id = this.$route.query.id
+        if (id != undefined) {
+            this.get(id)
+            this.url = 'project/update'
+            this.model.id = id
+        }
     },
     methods: {
         change: function (e) {
@@ -184,6 +212,7 @@ Vue.component('page-project-create', {
 
             //如果是选中，则添加进去
             if (e.target.checked) {
+                console.log(this.ids)
                 this.ids.push(machine_id)
             } else {
                 this.ids = this.ids.filter(function (one) {
@@ -195,9 +224,24 @@ Vue.component('page-project-create', {
         },
 
         save: function () {
-            this.$root.ajax(this, 'post', 'project/create', this.model, function () {
+            this.$root.ajax(this, 'post', this.url, this.model, function () {
                 this.$router.push('/project')
             })
+        },
+
+        get: function (id) {
+
+            this.$root.ajax(this, 'get', 'project/get', {id: id}, function (data) {
+                this.model.name = data.name
+                this.model.repository = data.repository
+                this.model.directory = data.directory
+                this.model.save_directory = data.save_directory
+                this.model.pre_deploy = data.pre_deploy
+                this.model.post_release = data.post_release
+                this.ids = JSON.parse(data.machine_ids)
+                this.model.machine_ids = data.machine_ids
+            })
+
         }
 
     }
@@ -241,6 +285,10 @@ Vue.component('page-task', {
         },
         status_str: function (val) {
             var map = {1: '未处理', 2: "已处理"}
+            return map[val]
+        },
+        deploy_str: function (val) {
+            var map = {1: '部署', 2: "回滚当前"}
             return map[val]
         },
         deploy:function(e){
